@@ -6,6 +6,7 @@
   "versionLabel": "4.2",
   "sdkVersion": "3",
   "targetPlatforms": ["aplite", "basalt", "chalk", "diorite"],
+  "enableMultiJS": true,
   "watchapp": {
     "watchface": false
   },

@@ -93,6 +93,14 @@ void timer_check_elapsed(void) {
   }
 }
 
+static int64_t mabs(int64_t v) {
+  if (v < 0) {
+    return -v;
+  } else {
+    return v;
+  }
+}
+
 // Increment timer value currently being edited
 void timer_increment(int64_t increment) {
   // if in paused stopwatch mode, rewind to previous time
@@ -102,9 +110,9 @@ void timer_increment(int64_t increment) {
   }
   // identify increment class
   int64_t interval;
-  if (abs(increment) < MSEC_IN_MIN) {
+  if (mabs(increment) < MSEC_IN_MIN) {
     interval = MSEC_IN_MIN;
-  } else if (abs(increment) < MSEC_IN_HR) {
+  } else if (mabs(increment) < MSEC_IN_HR) {
     interval = MSEC_IN_HR;
   } else {
     interval = MSEC_IN_HR * 100;

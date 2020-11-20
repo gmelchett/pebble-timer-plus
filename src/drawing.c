@@ -27,6 +27,7 @@
  -MAIN_TEXT_CIRCLE_RADIUS_EDIT / 2, MAIN_TEXT_CIRCLE_RADIUS_EDIT * 2, MAIN_TEXT_CIRCLE_RADIUS_EDIT)
 // Main Text
 #define TEXT_FIELD_COUNT 5
+#define TEXT_FIELD_SIZE 6
 #define TEXT_FIELD_EDIT_SPACING 7
 #define TEXT_FIELD_ANI_DURATION 140
 // Focus Layer
@@ -169,16 +170,16 @@ static void prv_main_text_update_state(Layer *layer) {
   uint16_t hr, min, sec;
   timer_get_time_parts(&hr, &min, &sec);
   // convert to strings
-  char buff[TEXT_FIELD_COUNT][4] = {{'\0'}};
+  char buff[TEXT_FIELD_COUNT][TEXT_FIELD_SIZE] = {{'\0'}};
   if (hr) {
-    snprintf(buff[0], sizeof(buff[0]), edit_mode ? "%02d" : "%d", hr);
+    snprintf(buff[0], TEXT_FIELD_SIZE, edit_mode ? "%02d" : "%d", hr);
   }
-  snprintf(buff[1], sizeof(buff[1]), "%s", hr && !edit_mode ? ":" : "\0");
-  snprintf(buff[2], sizeof(buff[2]), (hr || edit_mode) ? "%02d" : "%d", min);
-  snprintf(buff[3], sizeof(buff[3]), "%s", edit_mode ? "\0" : ":");
-  snprintf(buff[4], sizeof(buff[4]), "%02d", sec);
+  snprintf(buff[1], TEXT_FIELD_SIZE, "%s", hr && !edit_mode ? ":" : "\0");
+  snprintf(buff[2], TEXT_FIELD_SIZE, (hr || edit_mode) ? "%02d" : "%d", min);
+  snprintf(buff[3], TEXT_FIELD_SIZE, "%s", edit_mode ? "\0" : ":");
+  snprintf(buff[4], TEXT_FIELD_SIZE, "%02d", sec);
   // calculate new sizes for all text elements
-  char tot_buff[8];
+  char tot_buff[5*TEXT_FIELD_SIZE];
   snprintf(tot_buff, sizeof(tot_buff), "%s%s%s%s%s", buff[0], buff[1], buff[2], buff[3], buff[4]);
   uint16_t font_size = text_render_get_max_font_size(tot_buff, edit_mode ? MAIN_TEXT_BOUNDS_EDIT :
     MAIN_TEXT_BOUNDS);
@@ -219,14 +220,14 @@ static void prv_render_main_text(GContext *ctx, GRect bounds) {
   timer_get_time_parts(&hr, &min, &sec);
   // convert to strings
   bool edit_mode = main_get_control_mode() != ControlModeCounting;
-  char buff[TEXT_FIELD_COUNT][4] = {{'\0'}};
+  char buff[TEXT_FIELD_COUNT][TEXT_FIELD_SIZE] = {{'\0'}};
   if (hr) {
-    snprintf(buff[0], sizeof(buff[0]), edit_mode ? "%02d" : "%d", hr);
+    snprintf(buff[0], TEXT_FIELD_SIZE, edit_mode ? "%02d" : "%d", hr);
   }
-  snprintf(buff[1], sizeof(buff[1]), "%s", hr && !edit_mode ? ":" : "\0");
-  snprintf(buff[2], sizeof(buff[2]), (hr || edit_mode) ? "%02d" : "%d", min);
-  snprintf(buff[3], sizeof(buff[3]), "%s", edit_mode ? "\0" : ":");
-  snprintf(buff[4], sizeof(buff[4]), "%02d", sec);
+  snprintf(buff[1], TEXT_FIELD_SIZE, "%s", hr && !edit_mode ? ":" : "\0");
+  snprintf(buff[2], TEXT_FIELD_SIZE, (hr || edit_mode) ? "%02d" : "%d", min);
+  snprintf(buff[3], TEXT_FIELD_SIZE, "%s", edit_mode ? "\0" : ":");
+  snprintf(buff[4], TEXT_FIELD_SIZE, "%02d", sec);
   // draw the main text elements in their respective bounds
   for (uint8_t ii = 0; ii < TEXT_FIELD_COUNT; ii++) {
     text_render_draw_scalable_text(ctx, buff[ii], drawing_data.text_fields[ii]);
